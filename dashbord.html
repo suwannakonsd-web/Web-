@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน้าหลัก - ระบบยืม-คืนหนังสือ</title>
+  <style>
+    :root {
+      --phi: 1.618;
+      --s1: 0.618rem;
+      --s2: 1rem;
+      --s3: 1.618rem;
+      --s4: 2.618rem;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Tahoma, sans-serif;
+      font-size: var(--s2);
+      line-height: var(--phi);
+      color: #000;
+      background: #fff;
+    }
+
+    /* 1. GOLDEN RATIO LAYOUT: พื้นที่หลัก 61.8% (1.618fr) : เมนูขวา 38.2% (1fr) */
+    .dashboard-container {
+      display: grid;
+      grid-template-columns: 1.618fr 1fr;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    /* พื้นที่ฝั่งซ้าย */
+    .dashboard-main {
+      padding: var(--s3) var(--s4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* 2. RULE OF THIRDS (จุดตัดบนซ้าย: หัวข้อ + ค้นหาด่วน) */
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: var(--s2);
+      border-bottom: 1px solid #000;
+      margin-bottom: var(--s3);
+    }
+
+    .main-header h1 {
+      font-size: var(--s3);
+      font-weight: bold;
+    }
+
+    .search-box {
+      padding: var(--s1) var(--s2);
+      border: 1px solid #000;
+      font-size: var(--s2);
+      width: 16.18rem;
+    }
+
+    /* ตารางการ์ดหมวดหมู่ 3x2 (สอดคล้องกับจุดตัด 9 ช่อง) */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      row-gap: var(--s3);
+      column-gap: var(--s3);
+      width: 100%;
+      margin: auto 0;
+    }
+
+    .card-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s1);
+      width: 100%;
+      text-decoration: none;
+      color: #000;
+      cursor: pointer;
+    }
+
+    /* กล่องปกหนังสือตามสัดส่วน Golden Ratio (1 : 1.35) */
+    .card-box {
+      border: 1px solid #000;
+      width: 100%;
+      aspect-ratio: 1 / 1.25;
+      padding: var(--s2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: background 0.15s;
+    }
+
+    .card-item:hover:not(.disabled) .card-box {
+      background: #f2f2f2;
+    }
+
+    .card-caption {
+      border: 1px solid #000;
+      width: 100%;
+      height: var(--s4);
+      padding: var(--s1) var(--s2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    /* 3. POKA-YOKE: หมวดหมู่ที่หนังสือหมดจะถูกล็อกไม่ให้กด */
+    .card-item.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* แถบด้านขวา (38.2%) */
+    .dashboard-sidebar {
+      border-left: 2px solid #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100vh;
+    }
+
+    /* จุดตัดบนขวา: โปรไฟล์ + สถานะสิทธิ์การยืม (Poka-Yoke Info) */
+    .profile-header {
+      padding: var(--s3);
+      border-bottom: 1px solid #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--s2);
+    }
+
+    .profile-avatar {
+      width: 8.5rem;
+      height: 8.5rem;
+      border: 1px solid #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .quota-badge {
+      border: 1px solid #000;
+      padding: var(--s1) var(--s2);
+      width: 100%;
+      font-size: 0.9rem;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .sidebar-menu li {
+      border-bottom: 1px solid #000;
+      flex: 1;
+      display: flex;
+    }
+
+    .sidebar-menu li:last-child {
+      border-bottom: none;
+    }
+
+    .sidebar-menu a, .sidebar-menu button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: 100%;
+      padding: 0 var(--s3);
+      text-decoration: none;
+      color: #000;
+      background: none;
+      border: none;
+      font-size: var(--s2);
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .sidebar-menu a:hover, .sidebar-menu button:hover {
+      background: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard-container">
+    
+    <!-- ฝั่งซ้าย (61.8% Golden Ratio) -->
+    <section class="dashboard-main">
+      
+      <!-- จุดตัดบนซ้าย: ชื่อหน้า + ค้นหาหมวดหมู่ -->
+      <header class="main-header">
+        <div>
+          <h1>หมวดหมู่หนังสือในระบบ</h1>
+          <small>เลือกหมวดหมู่เพื่อดูรายการหนังสือที่ว่างให้ยืม</small>
+        </div>
+        <input type="text" id="filterCategory" class="search-box" onkeyup="filterCards()" placeholder="ค้นหาหมวดหมู่หนังสือ...">
+      </header>
+
+      <!-- กริด 3x2 (จุดตัด 9 ช่อง) -->
+      <div class="card-grid" id="categoryGrid">
+        
+        <a href="thai-book.html" class="card-item" data-name="ไทย">
+          <div class="card-box">
+            <strong>หมวดภาษาไทย</strong>
+            <small>ว่างให้ยืม: 12 เล่ม</small>
+          </div>
+          <div class="card-caption">ไทย</div>
+        </a>
+
+        <a href="english-book.html" class="card-item" data-name="อังกฤษ">
+          <div class="card-box">
+            <strong>หมวดภาษาอังกฤษ</strong>
+            <small>ว่างให้ยืม: 8 เล่ม</small>
+          </div>
+          <div class="card-caption">อังกฤษ</div>
+        </a>
+
+        <a href="japanese-book.html" class="card-item" data-name="ญี่ปุ่น">
+          <div class="card-box">
+            <strong>หมวดภาษาญี่ปุ่น</strong>
+            <small>ว่างให้ยืม: 5 เล่ม</small>
+          </div>
+          <div class="card-caption">ญี่ปุ่น</div>
+        </a>
+
+        <a href="korean-book.html" class="card-item" data-name="เกาหลี">
+          <div class="card-box">
+            <strong>หมวดภาษาเกาหลี</strong>
+            <small>ว่างให้ยืม: 4 เล่ม</small>
+          </div>
+          <div class="card-caption">เกาหลี</div>
+        </a>
+
+        <!-- ตัวอย่าง Poka-Yoke: หมวดที่หนังสือถูกยืมหมดแล้วจะกดเข้าไม่ได้ -->
+        <a href="javascript:void(0)" onclick="alert('ขออภัย: หนังสือหมวดภาษาจีนถูกยืมเต็มทุกเล่มในขณะนี้')" class="card-item disabled" data-name="จีน">
+          <div class="card-box">
+            <strong>หมวดภาษาจีน</strong>
+            <small>[ถูกยืมหมดแล้ว - 0 เล่ม]</small>
+          </div>
+          <div class="card-caption">จีน (เต็ม)</div>
+        </a>
+
+        <a href="other-book.html" class="card-item" data-name="อื่นๆ">
+          <div class="card-box">
+            <strong>หมวดอื่นๆ / ทั่วไป</strong>
+            <small>ว่างให้ยืม: 15 เล่ม</small>
+          </div>
+          <div class="card-caption">อื่นๆ</div>
+        </a>
+
+      </div>
+
+      <!-- แถบคำแนะนำด้านล่าง (Poka-Yoke Reminder) -->
+      <footer style="margin-top: var(--s3); padding-top: var(--s2); border-top: 1px solid #000; font-size: 0.9rem;">
+        <strong>กติกาการยืม:</strong> สมาชิกสามารถยืมหนังสือได้สูงสุด <strong>5 เล่ม</strong> ระยะเวลายืม <strong>7 วัน</strong> (หากเกินกำหนดมีค่าปรับ 10 บาท/วัน)
+      </footer>
+
+    </section>
+
+    <!-- ฝั่งขวา (38.2% Golden Ratio) -->
+    <aside class="dashboard-sidebar">
+      
+      <!-- จุดตัดบนขวา: โปรไฟล์และโควตาการยืม -->
+      <div class="profile-header">
+        <div class="profile-avatar">รูปโปรไฟล์</div>
+        <div>
+          <strong>Ohmmw</strong><br>
+          <small>รหัสสมาชิก: LIB-660124</small>
+        </div>
+        <div class="quota-badge">
+          สิทธิ์ยืมคงเหลือ: <strong>3 / 5 เล่ม</strong>
+        </div>
+      </div>
+
+      <!-- เมนูหลัก -->
+      <ul class="sidebar-menu">
+        <li>
+          <a href="order.html">
+            <span>รายการคำสั่งซื้อ / ยืม-คืน</span>
+            <span>[-]</span>
+          </a>
+        </li>
+        <li>
+          <a href="history.html">
+            <span>ประวัติการทำรายการ</span>
+            <span>&gt;</span>
+          </a>
+        </li>
+        <li>
+          <a href="wallet.html">
+            <span>กระเป๋าตังค์ / ชำระค่าปรับ</span>
+            <span>0.00 ฿</span>
+          </a>
+        </li>
+        <!-- จุดตัดล่างขวา: ปุ่มออกจากระบบพร้อม Poka-Yoke Confirm -->
+        <li>
+          <button type="button" onclick="confirmLogout()">
+            <strong>ออกจากระบบ</strong>
+            <span>[X]</span>
+          </button>
+        </li>
+      </ul>
+
+    </aside>
+
+  </div>
+
+  <script>
+    // ค้นหาหมวดหมู่แบบเรียลไทม์
+    function filterCards() {
+      var input = document.getElementById('filterCategory').value.toLowerCase();
+      var cards = document.querySelectorAll('.card-item');
+      cards.forEach(function(card) {
+        var name = card.getAttribute('data-name').toLowerCase();
+        card.style.display = name.includes(input) ? 'flex' : 'none';
+      });
+    }
+
+    // Poka-Yoke: ป้องกันการเผลอกดออกจากระบบโดยไม่ตั้งใจ
+    function confirmLogout() {
+      if (confirm('คุณต้องการออกจากระบบห้องสมุดใช่หรือไม่?')) {
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
+
+</body>
+</html>

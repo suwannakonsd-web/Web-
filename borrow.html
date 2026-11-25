@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>ระบบห้องสมุดออนไลน์ — รายการยืม-คืนหนังสือของฉัน</title>
+</head>
+<body style="margin:0; padding:0; width:100vw; height:100vh; font-family: sans-serif; background: #fff; color: #000;">
+
+  <table width="100%" height="100%" border="1" cellpadding="12" cellspacing="0" align="center">
+    
+    <tr height="60">
+      <td colspan="2">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>
+              <strong>ระบบห้องสมุดออนไลน์ — รายการยืม-คืนหนังสือของฉัน</strong><br />
+              ผู้ใช้งาน: <strong>คุณสมชาย ใจดี</strong> (รหัสสมาชิก: LIB-660124)
+            </td>
+            <td align="right">
+              <button type="button" onclick="toggleCatalog()"><strong>+ ยืมหนังสือเพิ่ม</strong></button>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr height="40">
+      <td colspan="2">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>
+              สิทธิ์การยืมคงเหลือ: <strong id="quotaRemain">3</strong> / 5 เล่ม &nbsp;|&nbsp;
+              กำลังยืมอยู่: <strong id="statBorrowing">2</strong> เล่ม
+            </td>
+            <td align="right">
+              เลยกำหนดส่งคืน: <strong id="statOverdue">1</strong> เล่ม &nbsp;|&nbsp;
+              ค่าปรับสะสม: <strong id="statFine">40.00</strong> บาท
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr id="catalogRow" hidden>
+      <td colspan="2" valign="top">
+        <fieldset>
+          <legend><strong>เลือกหนังสือที่ต้องการยืม (ระยะเวลายืม 7 วัน)</strong></legend>
+          <p align="right"><button type="button" onclick="toggleCatalog()">[X] ปิดหน้าต่างนี้</button></p>
+          <table width="100%" border="1" cellpadding="8" cellspacing="0" align="center">
+            <thead>
+              <tr>
+                <th align="center">รหัสหนังสือ</th>
+                <th align="center">ชื่อหนังสือ</th>
+                <th align="center">หมวดหมู่</th>
+                <th align="center">ผู้แต่ง</th>
+                <th align="center">ดำเนินการ</th>
+              </tr>
+            </thead>
+            <tbody id="catalogBody"></tbody>
+          </table>
+        </fieldset>
+      </td>
+    </tr>
+
+    <tr valign="top">
+      
+      <td width="61.8%" align="center">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>
+              <button type="button" onclick="setTab('ALL')">ทั้งหมด (<span id="cntAll">4</span>)</button>
+              <button type="button" onclick="setTab('BORROWING')">กำลังยืม (<span id="cntBorrowing">2</span>)</button>
+              <button type="button" onclick="setTab('OVERDUE')">เลยกำหนด (<span id="cntOverdue">1</span>)</button>
+              <button type="button" onclick="setTab('RETURNED')">คืนแล้ว (<span id="cntReturned">1</span>)</button>
+            </td>
+            <td align="right">
+              ค้นหา: <input type="text" id="searchInput" onkeyup="renderTable()" placeholder="ชื่อหนังสือ / รหัส..." />
+            </td>
+          </tr>
+        </table>
+
+        <br />
+
+        <table width="100%" border="1" cellpadding="8" cellspacing="0" align="center">
+          <thead>
+            <tr>
+              <th align="center">เลือก</th>
+              <th align="center">รหัสหนังสือ</th>
+              <th align="center">ชื่อหนังสือ</th>
+              <th align="center">วันที่ยืม</th>
+              <th align="center">กำหนดคืน</th>
+              <th align="center">ค่าปรับ</th>
+              <th align="center">สถานะ</th>
+            </tr>
+          </thead>
+          <tbody id="myBooksBody">
+            <tr style="background:#f0f0f0;">
+              <td align="center"><button type="button"><strong>[กำลังดู]</strong></button></td>
+              <td align="center"><strong>BK-1042</strong></td>
+              <td align="center"><strong>การออกแบบ UX/UI ฉบับสมบูรณ์</strong></td>
+              <td align="center">2026-11-20</td>
+              <td align="center">2026-11-27</td>
+              <td align="center">-</td>
+              <td align="center">[กำลังยืม]</td>
+            </tr>
+            <tr>
+              <td align="center"><button type="button">เลือก</button></td>
+              <td align="center">BK-2089</td>
+              <td align="center">เมาคลีลูกหมาป่า (ฉบับคลาสสิก)</td>
+              <td align="center">2026-11-10</td>
+              <td align="center">2026-11-17</td>
+              <td align="center">40.00 บาท</td>
+              <td align="center"><strong>[เลยกำหนด]</strong></td>
+            </tr>
+            <tr>
+              <td align="center"><button type="button">เลือก</button></td>
+              <td align="center">BK-3015</td>
+              <td align="center">พื้นฐานการเขียนโปรแกรมเว็บ</td>
+              <td align="center">2026-11-22</td>
+              <td align="center">2026-11-29</td>
+              <td align="center">-</td>
+              <td align="center">[กำลังยืม]</td>
+            </tr>
+            <tr>
+              <td align="center"><button type="button">เลือก</button></td>
+              <td align="center">BK-1102</td>
+              <td align="center">จิตวิทยาการออกแบบผลิตภัณฑ์</td>
+              <td align="center">2026-11-01</td>
+              <td align="center">2026-11-08</td>
+              <td align="center">-</td>
+              <td align="center">[คืนแล้ว]</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+
+      <td width="38.2%" id="inspectorPanel">
+        <div style="padding: 10px; border: 1px solid #000; text-align: left;">
+          <h3>ตรวจรายการ (Inspector Panel)</h3>
+          <p><strong>รหัส:</strong> BK-2089</p>
+          <p><strong>ชื่อเรื่อง:</strong> เมาคลีลูกหมาป่า (ฉบับคลาสสิก)</p>
+          <p><strong>ผู้แต่ง:</strong> รัดยาร์ด คิปลิง</p>
+          <p><strong>สถานะ:</strong> เลยกำหนดส่ง 8 วัน (ค่าปรับสะสม 40.00 บาท)</p>
+          <p><small>* ไม่อนุญาตให้ต่อเวลายืมเนื่องจากเลยกำหนดส่ง กรุณานำส่งคืนที่เคาน์เตอร์</small></p>
+          <button style="width: 100%; padding: 10px; background: #000; color: #fff; font-weight: bold; border: none; cursor: pointer;">แจ้งชำระค่าปรับ & คืนหนังสือ</button>
+        </div>
+      </td>
+
+    </tr>
+
+  </table>
+
+</body>
+</html>

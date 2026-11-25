@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หมวดหมู่ไทย - ระบบยืม-คืนหนังสือ</title>
+  <style>
+    :root {
+      --phi: 1.618;
+      --s0: 0.382rem;
+      --s1: 0.618rem;
+      --s2: 1rem;
+      --s3: 1.618rem;
+      --s4: 2.618rem;
+      --s5: 4.236rem;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: sans-serif;
+      font-size: var(--s2);
+      line-height: var(--phi);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    header {
+      padding: var(--s2) var(--s4) var(--s1) var(--s4);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .title-area { display: flex; flex-direction: column; gap: var(--s0); }
+    .back-link { font-size: 0.9rem; color: #000; text-decoration: none; }
+    h1 { font-size: var(--s4); font-weight: normal; line-height: 1.2; }
+    .search-box {
+      display: flex;
+      align-items: center;
+      border: 1px solid #000;
+      width: 100%;
+      max-width: 26.18rem;
+      padding: var(--s0) var(--s2);
+    }
+    .search-box input {
+      width: 100%;
+      border: none;
+      outline: none;
+      font-size: var(--s2);
+      padding: var(--s0) 0;
+    }
+    .search-box button {
+      background: none;
+      border: none;
+      font-size: var(--s2);
+      cursor: pointer;
+      padding-left: var(--s1);
+    }
+    main {
+      border-top: 1px solid #000;
+      border-bottom: 1px solid #000;
+      padding: var(--s3) var(--s4);
+      margin-top: var(--s1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      row-gap: var(--s3);
+      column-gap: var(--s4);
+      width: 100%;
+      max-width: 85rem;
+    }
+    .book-box {
+      border: 1px solid #000;
+      aspect-ratio: 1 / 1.1;
+      padding: var(--s2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #000;
+    }
+    footer {
+      padding: var(--s2) var(--s4);
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+    .cart-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #000;
+      width: 100%;
+      max-width: 16.18rem;
+      padding: var(--s1) var(--s2);
+      text-decoration: none;
+      color: #000;
+    }
+    .cart-icon { font-size: var(--s3); line-height: 1; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title-area">
+      <a href="dashboard.html" class="back-link">&larr; กลับหน้าหลัก</a>
+      <h1>หมวดหมู่ไทย</h1>
+    </div>
+    <form class="search-box" onsubmit="event.preventDefault();">
+      <input type="search" placeholder="ค้นหาหนังสือ..." aria-label="ค้นหาหนังสือ">
+      <button type="submit" aria-label="ค้นหา"></button>
+    </form>
+  </header>
+  <main>
+    <section class="book-grid" aria-label="รายการหนังสือหมวดหมู่ไทย">
+      <a href="#" class="book-box"></a>
+      <a href="#" class="book-box"></a>
+      <a href="#" class="book-box"></a>
+      <a href="#" class="book-box"></a>
+      <a href="#" class="book-box"></a>
+      <a href="#" class="book-box"></a>
+      <a href="#" class="book-box"></a>
+      <a href="#" class="book-box"></a>
+      <a href="#" class="book-box"></a>
+      <a href="#" class="book-box"></a>
+      <a href="#" class="book-box"></a>
+      <a href="#" class="book-box"></a>
+      <a href="#" class="book-box"></a>
+      <a href="#" class="book-box"></a>
+      <a href="#" class="book-box"></a>
+    </section>
+  </main>
+  <footer>
+    <a href="#" class="cart-box">
+      <span>รายการยืม</span>
+      <span class="cart-icon">🛒</span>
+    </a>
+  </footer>
+</body>
+</html>
